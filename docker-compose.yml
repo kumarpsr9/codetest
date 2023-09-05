@@ -1,0 +1,23 @@
+version: '3.8'  # Use the appropriate version of Docker Compose
+services:
+  compiler:
+    build: 
+      context: ./
+      dockerfile: Dockerfile
+    image: compiler
+    volumes:
+      - ${PWD}/temp:/app/temp
+    deploy:
+      replicas: 10
+    restart: always
+  nginx:
+    image: nginx:latest
+    ports:
+      - 82:80
+    depends_on:
+      - compiler
+    restart: always
+    volumes:
+      - ${PWD}/nginx/conf.d:/etc/nginx/conf.d/
+
+  
